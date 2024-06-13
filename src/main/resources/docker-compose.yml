@@ -1,0 +1,13 @@
+version: '3.1'
+services:
+  db:
+    image: mysql
+    container_name: artist_and_albums_db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: artist_and_albums
+    ports:
+      - "3307:3306"
+    volumes:
+      - ./dump.sql:/docker-entrypoint-initdb.d/dump.sql
