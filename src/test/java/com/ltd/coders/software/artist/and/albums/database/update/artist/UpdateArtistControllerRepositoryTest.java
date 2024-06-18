@@ -16,14 +16,17 @@ import org.springframework.http.ResponseEntity;
 import com.ltd.coders.software.artist.and.albums.database.RepositoryHelper;
 import com.ltd.coders.software.artist.and.albums.database.entity.Album;
 import com.ltd.coders.software.artist.and.albums.database.entity.Artist;
+import com.ltd.coders.software.artist.and.albums.database.kafka.MessageProducerService;
 
 public class UpdateArtistControllerRepositoryTest extends RepositoryHelper {
 
 	private static final String UPDATED_ARTIST_NAME = "Updated Artist Name";
 	private Artist artist, artistToReturn;
+	private MessageProducerService mockMessageProducerService;
 
 	@Before
 	public void setUp() throws Exception {
+		mockMessageProducerService = mock(MessageProducerService.class);
 		artist = Artist.builder().artistId(1L).artistName(ARTIST_NAME_ONE).build();
 		albumsList = List.of(Album.builder().artistName(ARTIST_NAME_ONE).albumName(ALBUM_ONE).build());
 		artist.setAlbums(albumsList);
@@ -38,8 +41,8 @@ public class UpdateArtistControllerRepositoryTest extends RepositoryHelper {
 		when(mockService.findArtist(1)).thenReturn(Optional.of(artist));
 		when(mockService.updateArtist(artist, ARTIST_NAME_ONE, UPDATED_ARTIST_NAME)).thenReturn(artistToReturn);
 
-		ResponseEntity<Artist> results = new UpdateArtistController(mockService).updateArtistAlbumName(1,
-				ARTIST_NAME_ONE, UPDATED_ARTIST_NAME);
+		ResponseEntity<Artist> results = new UpdateArtistController(mockService, mockMessageProducerService)
+				.updateArtistAlbumName(1, ARTIST_NAME_ONE, UPDATED_ARTIST_NAME);
 
 		verify(mockService, times(1)).findArtist(1);
 		verify(mockService, times(1)).updateArtist(artist, ARTIST_NAME_ONE, UPDATED_ARTIST_NAME);

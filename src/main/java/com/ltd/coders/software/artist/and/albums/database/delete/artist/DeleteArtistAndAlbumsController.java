@@ -2,7 +2,6 @@ package com.ltd.coders.software.artist.and.albums.database.delete.artist;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,11 +23,12 @@ public class DeleteArtistAndAlbumsController {
 
 	private static final Logger log = LogManager.getLogger(DeleteArtistAndAlbumsController.class);
 	private IDeleteArtistAndAlbumsService deleteArtistService;
-	@Autowired
 	private MessageProducerService messageProducerService;
 	
-	public DeleteArtistAndAlbumsController(IDeleteArtistAndAlbumsService deleteArtistService) {
+	public DeleteArtistAndAlbumsController(IDeleteArtistAndAlbumsService deleteArtistService,
+			MessageProducerService messageProducerService) {
 		this.deleteArtistService = deleteArtistService;
+		this.messageProducerService = messageProducerService;
 	}
 
 	@Operation

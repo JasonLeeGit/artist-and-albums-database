@@ -4,7 +4,6 @@ import java.util.Optional;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,15 +27,16 @@ import jakarta.validation.constraints.Positive;
 @RestController
 @RequestMapping("/v1/artist/service")
 public class UpdateArtistController {
-	
+
 	private static final Logger log = LogManager.getLogger(UpdateArtistController.class);
 
 	private IUpdateArtistAlbumService updateArtistAlbumService;
-	@Autowired
 	private MessageProducerService messageProducerService;
-	
-	public UpdateArtistController(IUpdateArtistAlbumService updateArtistAlbumService) {
+
+	public UpdateArtistController(IUpdateArtistAlbumService updateArtistAlbumService,
+			MessageProducerService messageProducerService) {
 		this.updateArtistAlbumService = updateArtistAlbumService;
+		this.messageProducerService = messageProducerService;
 	}
 
 	@Operation
@@ -47,24 +47,27 @@ public class UpdateArtistController {
 			@RequestParam("new-album-name") @NotBlank(message = "new album name cannot be null or empty") String newAlbumName) {
 
 		log.error("UpdateArtistController.updateArtistAlbumName()");
-		
+
 		Optional<Artist> artist = updateArtistAlbumService.findArtist(id);
 		if (artist.isPresent()) {
 			Artist updatedArtist = updateArtistAlbumService.updateArtist(artist.get(), oldAlbumName, newAlbumName);
 			if (updatedArtist != null) {
-				messageProducerService.sendMessage("artists-topic", "In updateArtistAlbumName, updating artist name " +oldAlbumName+ " to "+newAlbumName);
+				messageProducerService.sendMessage("artists-topic",
+						"In updateArtistAlbumName, updating artist name " + oldAlbumName + " to " + newAlbumName);
 				return ResponseEntity.ok(updatedArtist);
 			} else {
-				 	MultiValueMap<String, String> headers = new HttpHeaders();
-				 	headers.add("Error message", "Failed to update artist for id " + id);
-				 	messageProducerService.sendMessage("artists-topic", "In updateArtistAlbumName, Failed to update artist for id " + id);
-				 	return new ResponseEntity<Artist>(headers, HttpStatus.BAD_REQUEST);
+				MultiValueMap<String, String> headers = new HttpHeaders();
+				headers.add("Error message", "Failed to update artist for id " + id);
+				messageProducerService.sendMessage("artists-topic",
+						"In updateArtistAlbumName, Failed to update artist for id " + id);
+				return new ResponseEntity<Artist>(headers, HttpStatus.BAD_REQUEST);
 			}
 		} else {
 			MultiValueMap<String, String> headers = new HttpHeaders();
-		 	headers.add("Error message","Failed to find existing artist for id " + id);
-			messageProducerService.sendMessage("artists-topic", "In updateArtistAlbumName, Failed to find existing artist for id " + id);
-		 	return new ResponseEntity<Artist>(headers, HttpStatus.NO_CONTENT);
+			headers.add("Error message", "Failed to find existing artist for id " + id);
+			messageProducerService.sendMessage("artists-topic",
+					"In updateArtistAlbumName, Failed to find existing artist for id " + id);
+			return new ResponseEntity<Artist>(headers, HttpStatus.NO_CONTENT);
 		}
 	}
 }

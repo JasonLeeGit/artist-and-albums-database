@@ -13,13 +13,16 @@ import org.junit.Test;
 import org.springframework.http.ResponseEntity;
 
 import com.ltd.coders.software.artist.and.albums.database.RepositoryForMocksHelper;
+import com.ltd.coders.software.artist.and.albums.database.kafka.MessageProducerService;
 
 public class ShowAllArtistNamesControllerMockTest extends RepositoryForMocksHelper {
 
-	private IShowAllArtistNamesService mockService ;
+	private IShowAllArtistNamesService mockService;
+	private MessageProducerService mockMessageProducerService;
 	@Before
 	public void setUp() throws Exception {		
 		mockService = mock(IShowAllArtistNamesService.class);
+		mockMessageProducerService = mock(MessageProducerService.class);
 		artistNameList = Arrays.asList(ARTIST_NAME_ONE, ARTIST_NAME_TWO, ARTIST_NAME_THREE);
 	}
 
@@ -27,7 +30,7 @@ public class ShowAllArtistNamesControllerMockTest extends RepositoryForMocksHelp
 	public void showAllArtistNamesTest() {
 		when(mockService.getAllArtistNames()).thenReturn(artistNameList);
 
-		ResponseEntity<List<String>> albumNamesResponse = new ShowAllArtistNamesController(mockService).showAllArtistNames();
+		ResponseEntity<List<String>> albumNamesResponse = new ShowAllArtistNamesController(mockService,mockMessageProducerService).showAllArtistNames();
 		assertEquals(albumNamesResponse.getBody().get(0).toString(), ARTIST_NAME_ONE);
 		assertEquals(albumNamesResponse.getBody().get(1).toString(), ARTIST_NAME_TWO);
 		assertEquals(albumNamesResponse.getBody().get(2).toString(), ARTIST_NAME_THREE);
@@ -37,7 +40,7 @@ public class ShowAllArtistNamesControllerMockTest extends RepositoryForMocksHelp
 	public void showAllArtistNamesWhenNoneFoundTest() {
 		when(mockService.getAllArtistNames()).thenReturn(new ArrayList<String>());
 
-		ResponseEntity<List<String>> albumNamesResponse = new ShowAllArtistNamesController(mockService).showAllArtistNames();
+		ResponseEntity<List<String>> albumNamesResponse = new ShowAllArtistNamesController(mockService,mockMessageProducerService).showAllArtistNames();
 		assertEquals(albumNamesResponse.getBody().size(), 0);
 	}
 }

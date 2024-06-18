@@ -19,14 +19,17 @@ import com.ltd.coders.software.artist.and.albums.database.RepositoryForMocksHelp
 import com.ltd.coders.software.artist.and.albums.database.entity.Album;
 import com.ltd.coders.software.artist.and.albums.database.entity.Artist;
 import com.ltd.coders.software.artist.and.albums.database.entity.Track;
+import com.ltd.coders.software.artist.and.albums.database.kafka.MessageProducerService;
 
 public class ShowAllArtistsWithAllAlbumsWithPaginationControllerMockTest extends RepositoryForMocksHelper {
 
 	private IShowAllArtistsWithAllAlbumsWithPaginationService mockService;
+	private MessageProducerService mockMessageProducerService;
 	
 	@Before
 	public void setUp() throws Exception {
 		mockService = mock(IShowAllArtistsWithAllAlbumsWithPaginationService.class);
+		mockMessageProducerService = mock(MessageProducerService.class);
 
 		artist = Artist.builder().artistId(1L).artistName(ARTIST_NAME_ONE).build();
 		trackList = List.of(Track.builder().albumName(ALBUM_ONE).artistName(ARTIST_NAME_ONE).bitRate(BITRATE).build(),
@@ -43,7 +46,7 @@ public class ShowAllArtistsWithAllAlbumsWithPaginationControllerMockTest extends
 	public void showAllArtistsWithAllAlbumsAndTrackWithPagination() {		
 		when(mockService.getAllArtistsWithPagination(0,1)).thenReturn(new PageHelper().getArtists(artistList, 0, 1));
 
-		ResponseEntity<Page<Artist>> results = new ShowAllArtistsWithAllAlbumsWithPaginationController(mockService)
+		ResponseEntity<Page<Artist>> results = new ShowAllArtistsWithAllAlbumsWithPaginationController(mockService, mockMessageProducerService)
 				.showAllArtistsWithAllAlbumsAndTrackWithPagination(0,1);
 
 		verify(mockService, times(1)).getAllArtistsWithPagination(0,1);
@@ -67,7 +70,7 @@ public class ShowAllArtistsWithAllAlbumsWithPaginationControllerMockTest extends
 	public void showAllArtistsWithAllAlbumsAndTrackWithPaginationNoResults() {
 		when(mockService.getAllArtistsWithPagination(0,1)).thenReturn(new PageHelper().getArtists(new ArrayList<>(), 0, 1));
 
-		ResponseEntity<Page<Artist>> results = new ShowAllArtistsWithAllAlbumsWithPaginationController(mockService)
+		ResponseEntity<Page<Artist>> results = new ShowAllArtistsWithAllAlbumsWithPaginationController(mockService, mockMessageProducerService)
 				.showAllArtistsWithAllAlbumsAndTrackWithPagination(0,1);
 
 		verify(mockService, times(1)).getAllArtistsWithPagination(0,1);

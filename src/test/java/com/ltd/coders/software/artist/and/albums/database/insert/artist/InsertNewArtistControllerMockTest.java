@@ -18,6 +18,7 @@ import com.ltd.coders.software.artist.and.albums.database.entity.Album;
 import com.ltd.coders.software.artist.and.albums.database.entity.Artist;
 import com.ltd.coders.software.artist.and.albums.database.entity.Track;
 import com.ltd.coders.software.artist.and.albums.database.exception.ArtistExistsException;
+import com.ltd.coders.software.artist.and.albums.database.kafka.MessageProducerService;
 
 public class InsertNewArtistControllerMockTest extends RepositoryForMocksHelper {
 
@@ -25,33 +26,35 @@ public class InsertNewArtistControllerMockTest extends RepositoryForMocksHelper 
 	private Artist artist;
 	private ArtistRequestDto invalidArtistRequestDto;
 	private IInsertNewArtistService mockService;
-	
+	private MessageProducerService mockMessageProducerService;
+
 	@Before
 	public void setUp() {
 		mockService = mock(IInsertNewArtistService.class);
-		
+		mockMessageProducerService = mock(MessageProducerService.class);
 		trackList = List.of(Track.builder().albumName(ALBUM_ONE).artistName(ARTIST_NAME_ONE).bitRate(BITRATE).build());
 		albumsList = List.of(Album.builder().artistName(ARTIST_NAME_ONE).albumName(ALBUM_ONE).tracks(trackList).build());
-		artistToSaveRequest = ArtistRequestDto.builder().artistName(ARTIST_NAME_ONE).albums(albumsList).build();	
+		artistToSaveRequest = ArtistRequestDto.builder().artistName(ARTIST_NAME_ONE).albums(albumsList).build();
 		artist = Artist.builder().artistName(ARTIST_NAME_ONE).albums(albumsList).build();
-		
-		invalidArtistRequestDto = ArtistRequestDto.builder().artistName("").albums(albumsList).build();	
+
+		invalidArtistRequestDto = ArtistRequestDto.builder().artistName("").albums(albumsList).build();
 	}
 
 	@Test
 	public void insertArtistValidTest() throws ArtistExistsException {
 		when(mockService.insertArtist(artist)).thenReturn(artist);
-		ResponseEntity<Artist> albumNamesResponse = new InsertNewArtistController(mockService).insertArtist(artistToSaveRequest);
-	    
+		ResponseEntity<Artist> albumNamesResponse = new InsertNewArtistController(mockService,
+				mockMessageProducerService).insertArtist(artistToSaveRequest);
+
 		verify(mockService, times(1)).insertArtist(artist);
 		assertEquals(albumNamesResponse.getBody().getAlbums().get(0).getArtistName(), ARTIST_NAME_ONE);
 	}
-	
+
 	@Test
-	public void insertArtistMissingArtistNameTest() throws ArtistExistsException {	
+	public void insertArtistMissingArtistNameTest() throws ArtistExistsException {
 		when(mockService.insertArtist(artist)).thenReturn(artist);
-		new InsertNewArtistController(mockService).insertArtist(invalidArtistRequestDto);
-	    
+		new InsertNewArtistController(mockService, mockMessageProducerService).insertArtist(invalidArtistRequestDto);
+
 		verify(mockService, times(0)).insertArtist(artist);
 	}
 }

@@ -2,7 +2,6 @@ package com.ltd.coders.software.artist.and.albums.database.all.artists.with.albu
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,14 +23,14 @@ import jakarta.validation.constraints.Min;
 public class ShowAllArtistsWithAllAlbumsWithPaginationController {
 
 	private static final Logger log = LogManager.getLogger(ShowAllArtistsWithAllAlbumsWithPaginationController.class);
+	private MessageProducerService messageProducerService;
 	
 	public ShowAllArtistsWithAllAlbumsWithPaginationController(
-			IShowAllArtistsWithAllAlbumsWithPaginationService readAllArtistsWithAllAlbumsService) {
+			IShowAllArtistsWithAllAlbumsWithPaginationService readAllArtistsWithAllAlbumsService,
+			MessageProducerService messageProducerService) {
 		this.readAllArtistsWithAllAlbumsService = readAllArtistsWithAllAlbumsService;
+		this.messageProducerService = messageProducerService; 
 	}
-	
-	@Autowired
-	private MessageProducerService messageProducerService;
 	
 	public IShowAllArtistsWithAllAlbumsWithPaginationService readAllArtistsWithAllAlbumsService;
 

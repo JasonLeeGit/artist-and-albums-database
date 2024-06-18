@@ -15,6 +15,7 @@ public interface IArtistAndAlbumsRepository extends JpaRepository<Artist, Intege
 	Artist findByArtistName(String artistName);
 
 	// Not JpaRepository this generates something like DELET FROM Album WHERE artistName = ?
+	@Modifying
 	void deleteByArtistName(String artistName);
 
 	@Query(value = "SELECT * FROM artist where artist_name = :artistName", nativeQuery = true)
