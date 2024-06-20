@@ -7,9 +7,17 @@ import static org.mockito.Mockito.when;
 import java.util.Arrays;
 import java.util.List;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.ResponseEntity;
+import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
+import org.testcontainers.containers.KafkaContainer;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
+import org.testcontainers.utility.DockerImageName;
 
 import com.ltd.coders.software.artist.and.albums.database.RepositoryForMocksHelper;
 import com.ltd.coders.software.artist.and.albums.database.entity.Album;
@@ -17,16 +25,26 @@ import com.ltd.coders.software.artist.and.albums.database.entity.Artist;
 import com.ltd.coders.software.artist.and.albums.database.entity.Track;
 import com.ltd.coders.software.artist.and.albums.database.kafka.MessageProducerService;
 
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@Testcontainers
 public class ShowAllAlbumsAndTracksForArtistControllerMockTest extends RepositoryForMocksHelper {
 
 	private Artist artistToReturn;
 	private IShowAllAlbumsAndTracksForArtistService mockService;
-	private MessageProducerService mockMessageProducerService;
+	@Autowired
+	private MessageProducerService messageProducerService;
+	
+	@Container
+	static KafkaContainer kafka = new KafkaContainer(DockerImageName.parse("confluentinc/cp-kafka:latest"));
+	
+	@DynamicPropertySource
+	public static void initKafkaProperties(DynamicPropertyRegistry registry) {
+		registry.add("spring.kafka.bootstrap-servers", kafka::getBootstrapServers);
+	}
 
-	@Before
+	@BeforeEach
 	public void setUp() throws Exception {
 		mockService = mock(IShowAllAlbumsAndTracksForArtistService.class);
-		mockMessageProducerService = mock(MessageProducerService.class);
 		artistNameList = Arrays.asList(ARTIST_NAME_ONE, ARTIST_NAME_TWO, ARTIST_NAME_THREE);				
 		trackList = List.of(Track.builder().albumName(ALBUM_ONE).artistName(ARTIST_NAME_ONE).bitRate(BITRATE).build());
 		albumsList = List.of(Album.builder().artistName(ARTIST_NAME_ONE).albumName(ALBUM_ONE).tracks(trackList).build());
@@ -39,7 +57,7 @@ public class ShowAllAlbumsAndTracksForArtistControllerMockTest extends Repositor
 		when(mockService.getAllAlbumsAndTracksForArtist(ARTIST_NAME_ONE)).thenReturn(artistToReturn);
 
 		ResponseEntity<Artist> response = new ShowAllAlbumsAndTracksForArtistController(mockService, 
-				mockMessageProducerService).showAllAlbumsAndTracksForArtist(ARTIST_NAME_ONE);
+				messageProducerService).showAllAlbumsAndTracksForArtist(ARTIST_NAME_ONE);
 		assertEquals(response.getBody().getAlbums().get(0).getAlbumName().toString(), ALBUM_ONE);
 		assertEquals(response.getBody().getAlbums().get(0).getArtistName().toString(), ARTIST_NAME_ONE);
 		assertEquals(response.getBody().getAlbums().get(0).getTracks().get(0).getArtistName().toString(), ARTIST_NAME_ONE);
@@ -52,7 +70,7 @@ public class ShowAllAlbumsAndTracksForArtistControllerMockTest extends Repositor
 		when(mockService.getAllAlbumsForArtist(ARTIST_NAME_ONE)).thenReturn(artistNameList);
 
 		ResponseEntity<List<String>> response = new ShowAllAlbumsAndTracksForArtistController(mockService, 
-				mockMessageProducerService).showAllAlbumNamesForArtist(ARTIST_NAME_ONE);
+				messageProducerService).showAllAlbumNamesForArtist(ARTIST_NAME_ONE);
 
 		assertEquals(response.getBody().get(0).toString(), ARTIST_NAME_ONE);
 		assertEquals(response.getBody().get(1).toString(), ARTIST_NAME_TWO);
@@ -65,7 +83,7 @@ public class ShowAllAlbumsAndTracksForArtistControllerMockTest extends Repositor
 		when(mockService.getAllAlbumsAndTracksForArtistQuery(ARTIST_NAME_ONE)).thenReturn(artistToReturn);
 
 		ResponseEntity<Artist> response = new ShowAllAlbumsAndTracksForArtistController(mockService, 
-				mockMessageProducerService).showAllAlbumsAndTracksForArtistQuery(ARTIST_NAME_ONE);
+				messageProducerService).showAllAlbumsAndTracksForArtistQuery(ARTIST_NAME_ONE);
 
 		assertEquals(response.getBody().getAlbums().get(0).getAlbumName().toString(), ALBUM_ONE);
 		assertEquals(response.getBody().getAlbums().get(0).getArtistName().toString(), ARTIST_NAME_ONE);

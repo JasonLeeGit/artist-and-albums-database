@@ -5,10 +5,17 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import java.util.List;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.testcontainers.containers.KafkaContainer;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
+import org.testcontainers.utility.DockerImageName;
 
 import com.ltd.coders.software.artist.and.albums.database.ControllerJsonMapper;
 import com.ltd.coders.software.artist.and.albums.database.PageHelper;
@@ -16,13 +23,22 @@ import com.ltd.coders.software.artist.and.albums.database.entity.Album;
 import com.ltd.coders.software.artist.and.albums.database.entity.Artist;
 import com.ltd.coders.software.artist.and.albums.database.entity.Track;
 
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@Testcontainers
 public class ShowAllArtistsWithAllAlbumsWithPaginationControllerRestTest extends ControllerJsonMapper {
 
+	@Container
+	static KafkaContainer kafka = new KafkaContainer(DockerImageName.parse("confluentinc/cp-kafka:latest"));
+	
+	@DynamicPropertySource
+	public static void initKafkaProperties(DynamicPropertyRegistry registry) {
+		registry.add("spring.kafka.bootstrap-servers", kafka::getBootstrapServers);
+	}
+	
 	@MockBean
 	private IShowAllArtistsWithAllAlbumsWithPaginationService mockShowAllArtistsWithAllAlbumsFromDatabaseService;
-
-	@Override
-	@Before
+	
+	@BeforeEach
 	public void setUp() throws Exception {
 		super.setUp();
 		artistToReturn = Artist.builder().artistId(1L).artistName(ARTIST_NAME_ONE).build();

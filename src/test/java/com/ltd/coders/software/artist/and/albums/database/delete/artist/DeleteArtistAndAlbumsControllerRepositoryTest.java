@@ -5,8 +5,8 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.util.List;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.ltd.coders.software.artist.and.albums.database.RepositoryHelper;
@@ -24,7 +24,7 @@ public class DeleteArtistAndAlbumsControllerRepositoryTest extends RepositoryHel
 	private IArtistAndAlbumsRepository artistAndAlbumsRepository;
 	private Artist artist;
 	
-	@Before
+	@BeforeEach
 	public void setUp() {
 		artist = Artist.builder().artistId(1L).artistName(ARTIST_NAME_ONE).build();		
 		albumsList = List.of(

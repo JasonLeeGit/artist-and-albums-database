@@ -9,10 +9,18 @@ import static org.mockito.Mockito.when;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
+import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
+import org.testcontainers.containers.KafkaContainer;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
+import org.testcontainers.utility.DockerImageName;
 
 import com.ltd.coders.software.artist.and.albums.database.PageHelper;
 import com.ltd.coders.software.artist.and.albums.database.RepositoryForMocksHelper;
@@ -21,15 +29,25 @@ import com.ltd.coders.software.artist.and.albums.database.entity.Artist;
 import com.ltd.coders.software.artist.and.albums.database.entity.Track;
 import com.ltd.coders.software.artist.and.albums.database.kafka.MessageProducerService;
 
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@Testcontainers
 public class ShowAllArtistsWithAllAlbumsWithPaginationControllerMockTest extends RepositoryForMocksHelper {
 
 	private IShowAllArtistsWithAllAlbumsWithPaginationService mockService;
-	private MessageProducerService mockMessageProducerService;
+	@Autowired
+	private MessageProducerService messageProducerService;	
 	
-	@Before
+	@Container
+	static KafkaContainer kafka = new KafkaContainer(DockerImageName.parse("confluentinc/cp-kafka:latest"));
+	
+	@DynamicPropertySource
+	public static void initKafkaProperties(DynamicPropertyRegistry registry) {
+		registry.add("spring.kafka.bootstrap-servers", kafka::getBootstrapServers);
+	}
+	
+	@BeforeEach
 	public void setUp() throws Exception {
 		mockService = mock(IShowAllArtistsWithAllAlbumsWithPaginationService.class);
-		mockMessageProducerService = mock(MessageProducerService.class);
 
 		artist = Artist.builder().artistId(1L).artistName(ARTIST_NAME_ONE).build();
 		trackList = List.of(Track.builder().albumName(ALBUM_ONE).artistName(ARTIST_NAME_ONE).bitRate(BITRATE).build(),
@@ -46,7 +64,7 @@ public class ShowAllArtistsWithAllAlbumsWithPaginationControllerMockTest extends
 	public void showAllArtistsWithAllAlbumsAndTrackWithPagination() {		
 		when(mockService.getAllArtistsWithPagination(0,1)).thenReturn(new PageHelper().getArtists(artistList, 0, 1));
 
-		ResponseEntity<Page<Artist>> results = new ShowAllArtistsWithAllAlbumsWithPaginationController(mockService, mockMessageProducerService)
+		ResponseEntity<Page<Artist>> results = new ShowAllArtistsWithAllAlbumsWithPaginationController(mockService, messageProducerService)
 				.showAllArtistsWithAllAlbumsAndTrackWithPagination(0,1);
 
 		verify(mockService, times(1)).getAllArtistsWithPagination(0,1);
@@ -70,7 +88,7 @@ public class ShowAllArtistsWithAllAlbumsWithPaginationControllerMockTest extends
 	public void showAllArtistsWithAllAlbumsAndTrackWithPaginationNoResults() {
 		when(mockService.getAllArtistsWithPagination(0,1)).thenReturn(new PageHelper().getArtists(new ArrayList<>(), 0, 1));
 
-		ResponseEntity<Page<Artist>> results = new ShowAllArtistsWithAllAlbumsWithPaginationController(mockService, mockMessageProducerService)
+		ResponseEntity<Page<Artist>> results = new ShowAllArtistsWithAllAlbumsWithPaginationController(mockService, messageProducerService)
 				.showAllArtistsWithAllAlbumsAndTrackWithPagination(0,1);
 
 		verify(mockService, times(1)).getAllArtistsWithPagination(0,1);

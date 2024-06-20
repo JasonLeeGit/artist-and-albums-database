@@ -6,8 +6,8 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.ltd.coders.software.artist.and.albums.database.RepositoryHelper;
@@ -25,7 +25,7 @@ public class ShowAllArtistNamesControllerRepositoryTest extends RepositoryHelper
 	@Autowired
 	private IArtistAndAlbumsRepository artistAndAlbumsRepository;
 
-	@Before
+	@BeforeEach
 	public void setUp() {
 		artistList = new ArrayList<Artist>();
 		trackList = List.of(Track.builder().albumName(ALBUM_ONE).artistName(ARTIST_NAME_ONE).bitRate(BITRATE).build());

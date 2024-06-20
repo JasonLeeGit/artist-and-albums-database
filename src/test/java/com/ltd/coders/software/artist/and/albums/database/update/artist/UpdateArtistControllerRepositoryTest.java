@@ -9,8 +9,8 @@ import static org.mockito.Mockito.when;
 import java.util.List;
 import java.util.Optional;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.http.ResponseEntity;
 
 import com.ltd.coders.software.artist.and.albums.database.RepositoryHelper;
@@ -24,7 +24,7 @@ public class UpdateArtistControllerRepositoryTest extends RepositoryHelper {
 	private Artist artist, artistToReturn;
 	private MessageProducerService mockMessageProducerService;
 
-	@Before
+	@BeforeEach
 	public void setUp() throws Exception {
 		mockMessageProducerService = mock(MessageProducerService.class);
 		artist = Artist.builder().artistId(1L).artistName(ARTIST_NAME_ONE).build();

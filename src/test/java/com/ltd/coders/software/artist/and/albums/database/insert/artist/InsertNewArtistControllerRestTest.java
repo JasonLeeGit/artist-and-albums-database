@@ -7,11 +7,18 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import java.util.List;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.testcontainers.containers.KafkaContainer;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
+import org.testcontainers.utility.DockerImageName;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ltd.coders.software.artist.and.albums.database.ControllerJsonMapper;
@@ -19,19 +26,26 @@ import com.ltd.coders.software.artist.and.albums.database.dto.ArtistRequestDto;
 import com.ltd.coders.software.artist.and.albums.database.entity.Album;
 import com.ltd.coders.software.artist.and.albums.database.entity.Artist;
 
-//@RunWith(SpringRunner.class)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@Testcontainers
 public class InsertNewArtistControllerRestTest extends ControllerJsonMapper {
-	
+		
 	@MockBean
 	private IInsertNewArtistService mockInsertNewArtistService;
 	private ArtistRequestDto validArtistRequestDto;
 	private ArtistRequestDto invalidArtistRequestDto;
 	private Artist validArtistToSave;
 	private Artist invalidArtistToSave;
-
-	@Override
-	@Before
-	public void setUp() throws Exception {
+	
+	@Container
+	static KafkaContainer kafka = new KafkaContainer(DockerImageName.parse("confluentinc/cp-kafka:latest"));
+	
+	@DynamicPropertySource
+	public static void initKafkaProperties(DynamicPropertyRegistry registry) {
+		registry.add("spring.kafka.bootstrap-servers", kafka::getBootstrapServers);
+	}
+	
+	@BeforeEach	public void setUp() throws Exception {
 		super.setUp();
 		validArtistRequestDto = ArtistRequestDto.builder().artistName(ARTIST_NAME_ONE).build();
 		albumsList = List.of(Album.builder().artistName(ARTIST_NAME_ONE).albumName(ALBUM_ONE).build());

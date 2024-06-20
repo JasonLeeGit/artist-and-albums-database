@@ -6,9 +6,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.test.context.ActiveProfiles;
 
 import com.ltd.coders.software.artist.and.albums.database.entity.Artist;
 
+@ActiveProfiles("test")
 public class PageHelper {
 
 	public Page<Artist> getArtists(List<Artist> artistList, int page, int size) {

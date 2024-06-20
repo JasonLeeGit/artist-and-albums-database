@@ -5,8 +5,8 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.util.List;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.ltd.coders.software.artist.and.albums.database.RepositoryHelper;
@@ -21,7 +21,7 @@ public class InsertNewArtistControllerRepositoryTest extends RepositoryHelper {
 	private IArtistAndAlbumsRepository artistAndAlbumsRepository;
 	private Artist artistToSave;
 
-	@Before
+	@BeforeEach
 	public void setUp() {
 		trackList = List.of(Track.builder().albumName(ALBUM_ONE).artistName(ARTIST_NAME_ONE).bitRate(BITRATE).build());
 		albumsList = List.of(Album.builder().artistName(ARTIST_NAME_ONE).albumName(ALBUM_ONE).tracks(trackList).build());

@@ -24,7 +24,7 @@ import com.ltd.coders.software.artist.and.albums.database.update.artist.UpdateAr
 import com.ltd.coders.software.artist.and.albums.database.update.artist.UpdateArtistControllerRepositoryTest;
 import com.ltd.coders.software.artist.and.albums.database.update.artist.UpdateArtistControllerRestTest;
 
-@ActiveProfiles("test") // uses application-test.yml
+@ActiveProfiles("test")
 @RunWith(Suite.class)
 @SuiteClasses({
 	ShowAllArtistsWithAllAlbumsWithPaginationControllerMockTest.class,

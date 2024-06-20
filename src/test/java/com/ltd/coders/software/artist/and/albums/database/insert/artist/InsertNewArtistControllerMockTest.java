@@ -8,9 +8,17 @@ import static org.mockito.Mockito.when;
 
 import java.util.List;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.ResponseEntity;
+import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
+import org.testcontainers.containers.KafkaContainer;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
+import org.testcontainers.utility.DockerImageName;
 
 import com.ltd.coders.software.artist.and.albums.database.RepositoryForMocksHelper;
 import com.ltd.coders.software.artist.and.albums.database.dto.ArtistRequestDto;
@@ -20,18 +28,30 @@ import com.ltd.coders.software.artist.and.albums.database.entity.Track;
 import com.ltd.coders.software.artist.and.albums.database.exception.ArtistExistsException;
 import com.ltd.coders.software.artist.and.albums.database.kafka.MessageProducerService;
 
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@Testcontainers
 public class InsertNewArtistControllerMockTest extends RepositoryForMocksHelper {
 
 	private ArtistRequestDto artistToSaveRequest;
 	private Artist artist;
 	private ArtistRequestDto invalidArtistRequestDto;
 	private IInsertNewArtistService mockService;
-	private MessageProducerService mockMessageProducerService;
+	
+	@Autowired
+	private MessageProducerService messageProducerService;
 
-	@Before
+	@Container
+	static KafkaContainer kafka = new KafkaContainer(DockerImageName.parse("confluentinc/cp-kafka:latest"));
+	
+	@DynamicPropertySource
+	public static void initKafkaProperties(DynamicPropertyRegistry registry) {
+		registry.add("spring.kafka.bootstrap-servers", kafka::getBootstrapServers);
+	}
+
+	@BeforeEach
 	public void setUp() {
 		mockService = mock(IInsertNewArtistService.class);
-		mockMessageProducerService = mock(MessageProducerService.class);
+		messageProducerService = mock(MessageProducerService.class);
 		trackList = List.of(Track.builder().albumName(ALBUM_ONE).artistName(ARTIST_NAME_ONE).bitRate(BITRATE).build());
 		albumsList = List.of(Album.builder().artistName(ARTIST_NAME_ONE).albumName(ALBUM_ONE).tracks(trackList).build());
 		artistToSaveRequest = ArtistRequestDto.builder().artistName(ARTIST_NAME_ONE).albums(albumsList).build();
@@ -44,7 +64,7 @@ public class InsertNewArtistControllerMockTest extends RepositoryForMocksHelper 
 	public void insertArtistValidTest() throws ArtistExistsException {
 		when(mockService.insertArtist(artist)).thenReturn(artist);
 		ResponseEntity<Artist> albumNamesResponse = new InsertNewArtistController(mockService,
-				mockMessageProducerService).insertArtist(artistToSaveRequest);
+				messageProducerService).insertArtist(artistToSaveRequest);
 
 		verify(mockService, times(1)).insertArtist(artist);
 		assertEquals(albumNamesResponse.getBody().getAlbums().get(0).getArtistName(), ARTIST_NAME_ONE);
@@ -53,7 +73,7 @@ public class InsertNewArtistControllerMockTest extends RepositoryForMocksHelper 
 	@Test
 	public void insertArtistMissingArtistNameTest() throws ArtistExistsException {
 		when(mockService.insertArtist(artist)).thenReturn(artist);
-		new InsertNewArtistController(mockService, mockMessageProducerService).insertArtist(invalidArtistRequestDto);
+		new InsertNewArtistController(mockService, messageProducerService).insertArtist(invalidArtistRequestDto);
 
 		verify(mockService, times(0)).insertArtist(artist);
 	}

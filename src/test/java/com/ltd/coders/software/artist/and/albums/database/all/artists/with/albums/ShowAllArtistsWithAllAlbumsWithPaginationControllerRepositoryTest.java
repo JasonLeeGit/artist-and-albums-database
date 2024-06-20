@@ -6,8 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -25,7 +25,7 @@ public class ShowAllArtistsWithAllAlbumsWithPaginationControllerRepositoryTest e
 	private Artist artist;
 	private Artist artistTwo;
 
-	@Before
+	@BeforeEach
 	public void setUp() throws Exception {
 		artistList = new ArrayList<Artist>();
 		trackList = List.of(Track.builder().albumName(ALBUM_ONE).artistName(ARTIST_NAME_ONE).bitRate(BITRATE).build(),

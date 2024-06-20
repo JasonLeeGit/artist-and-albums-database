@@ -19,7 +19,7 @@ public class ShowAllArtistNamesServiceImpl implements IShowAllArtistNamesService
 	private static final Logger log = LogManager.getLogger(ShowAllArtistNamesServiceImpl.class);
 	@Autowired
 	private IArtistAndAlbumsRepository artistAndAlbumsRepository;
-
+	
 	@Override
 	@Cacheable("allArtistNames")
 	public List<String> getAllArtistNames() {

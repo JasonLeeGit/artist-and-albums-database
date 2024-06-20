@@ -2,10 +2,13 @@ package com.ltd.coders.software.artist.and.albums.database;
 
 import java.util.List;
 
+import org.springframework.test.context.ActiveProfiles;
+
 import com.ltd.coders.software.artist.and.albums.database.entity.Album;
 import com.ltd.coders.software.artist.and.albums.database.entity.Artist;
 import com.ltd.coders.software.artist.and.albums.database.entity.Track;
 
+@ActiveProfiles("test")
 public abstract class RepositoryForMocksHelper {
 	
 	protected Artist artist;

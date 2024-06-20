@@ -23,15 +23,13 @@ import com.ltd.coders.software.artist.and.albums.database.entity.Artist;
 import com.ltd.coders.software.artist.and.albums.database.entity.Track;
 
 /**
- * Run tests with JUnit4 configuration
  * @AutoConfigureMockMvc Use this if you need to configure the web layer for testing but don't need to use MockMvc
  */
 @RunWith(SpringRunner.class)
 @AutoConfigureWebTestClient
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK, classes = ArtistAndAlbums.class)
-@ActiveProfiles({"test","dev"})
+@ActiveProfiles({"test"})
 public abstract class ControllerJsonMapper {
-
 	
 	@Autowired
 	protected WebApplicationContext webApplicationContext;
