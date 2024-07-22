@@ -1,3 +1,5 @@
+name: artist_and_albums
+
 version: '3.1'
 services:
   db:
@@ -11,3 +13,24 @@ services:
       - "3307:3306"
     volumes:
       - ./dump.sql:/docker-entrypoint-initdb.d/dump.sql
+      
+  kafka:
+    image: landoop/fast-data-dev:latest
+    container_name: kafka
+    ports:
+      - 3181:3181
+      - 3040:3040
+      - 7082:7082
+      - 7083:7083
+      - 9092:9092
+    environment:
+      ADV_HOST: 127.0.0.1
+      RUNTESTS: 0
+      SAMPLEDATA: 0
+      BROKER_PORT: 9092
+      REST_PORT: 7082
+      CONNECT_PORT: 7083
+      ZK_PORT: 3181
+      WEB_PORT: 3040
+      REGISTRY_PORT: 8081
+    restart: always
