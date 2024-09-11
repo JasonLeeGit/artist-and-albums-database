@@ -5,7 +5,7 @@ To Run,
 
 cd to your resoucre folder in the project IE,
 
-cd C:\artist-and-albums-database\src\main\resources
+cd C:\workspace\artist-and-albums-database\src\main\resources
 
 open terminal/cmd prompt and run,
 
