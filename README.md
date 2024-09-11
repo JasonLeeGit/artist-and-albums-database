@@ -3,7 +3,7 @@ Rest application for searching and viewing artists and albums
 
 To Run,
 
-cd to your resoucre folder in the project IE,
+cd to your project resource folder,
 
 cd C:\workspace\artist-and-albums-database\src\main\resources
 
@@ -13,7 +13,7 @@ docker-compose up -d
 
 This will start the MySQL and Kafka containers
 
-Start your spring boot application running 
+Start the artist-and-albums-database spring boot application
 
 Open a browser and goto,
 
