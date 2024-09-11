@@ -7,11 +7,11 @@ cd to your resoucre folder in the project IE,
 
 cd C:\workspace\artist-and-albums-database\src\main\resources
 
-open terminal/cmd prompt and run,
+open terminal or cmd prompt and run,
 
 docker-compose up -d
 
-This will start the MySQL and Kafka containers running
+This will start the MySQL and Kafka containers
 
 Start your spring boot application running 
 
