@@ -1,20 +1,23 @@
 #config
 application:
- musicPath: C:\\Music\\
- 
-#to run via spring boot on docker containers
-#spring:
-# datasource: 
-#  url: jdbc:mysql://192.168.0.21:3307/ARTIST_AND_ALBUMS
+ musicPath: F:\\Music\\
 
-#run via eclipse local host
 spring:
  kafka:
-  bootstrap-servers: localhost:9092
   consumer:
+   auto-offset-reset: earliest
+   bootstrap-servers: 192.168.0.21:29092                   # Must use IP address not localhost when deploying app to docker
    group-id: my-group-id
+   key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+   value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+  producer:
+   acks: -1
+   bootstrap-servers: 192.168.0.21:29092                    # Must use IP address not localhost when deploying app to docker
+   key-serializer: org.apache.kafka.common.serialization.StringSerializer
+   value-serializer: org.springframework.kafka.support.serializer.JsonSerializer 
  datasource:
-  url: jdbc:mysql://localhost:3306/ARTIST_AND_ALBUMS
+  url: jdbc:mysql://192.168.0.21:3307/artist_and_albums      # Must use IP address not localhost when deploying app to docker
+  #url: jdbc:mysql://localhost:3307/artist_and_albums        # Use localhost when running application via eclipse
   username: root
   password: password
   driver-class-name: com.mysql.cj.jdbc.Driver
@@ -23,16 +26,6 @@ spring:
   hibernate:
    ddl-auto: update
   database-platform: org.hibernate.dialect.MySQL8Dialect
-#  properties:
-#   hibernate:
-#    session:
-#     events:
-#      log:
-#       LOG_QUERIES_SLOWER_THAN_MS: 1
-#    generate_statistics: true
-#    stat_category: DEBUG
-#    jdbc.batch_size: 50
-#    order_inserts: true
 springdoc:
  swagger-ui:
   path: /swagger-ui/index.html
