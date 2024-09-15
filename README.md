@@ -21,4 +21,4 @@ http://localhost:8080/swagger-ui/swagger-ui/index.html
 
 To view Kafka Topic and messages goto,
 
-http://localhost:3040/kafka-topics-ui/#/
+http://localhost:8090/ui/clusters/local/all-topics/artists-topic/messages?keySerde=String&valueSerde=String&limit=100
