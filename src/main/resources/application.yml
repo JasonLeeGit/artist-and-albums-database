@@ -17,7 +17,7 @@ spring:
    value-serializer: org.springframework.kafka.support.serializer.JsonSerializer 
  datasource:
   url: jdbc:mysql://192.168.0.21:3307/artist_and_albums      # Must use IP address not localhost when deploying app to docker
-  #url: jdbc:mysql://localhost:3307/artist_and_albums        # Use localhost when running application via eclipse
+#  url: jdbc:mysql://127.0.0.1:3306/artist_and_albums        # Use when running application via eclipse using local MySQL also comment out docker MySQL db service in compose file
   username: root
   password: password
   driver-class-name: com.mysql.cj.jdbc.Driver
@@ -36,7 +36,7 @@ logging:
  file:
   name: ./logs/artist-and-albums.log
  level:
-  root: INFO
+  root: ERROR
  pattern:
   console: '[%d{yy-MM-dd HH:mm:ss:SSS}][%-5p][%c][%t]%m%n'
   file: '[%d{yy-MM-dd HH:mm:ss:SSS}][%-5p][%c][%t]%m%n'

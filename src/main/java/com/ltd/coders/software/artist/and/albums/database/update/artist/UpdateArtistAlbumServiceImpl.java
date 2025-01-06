@@ -19,19 +19,19 @@ public class UpdateArtistAlbumServiceImpl implements IUpdateArtistAlbumService {
 
 	@Override
 	public Optional<Artist> findArtist(int id) {
-		log.error("UpdateArtistAlbumServiceImpl.findArtist()");
+		log.info("UpdateArtistAlbumServiceImpl.findArtist()");
 		return artistAndAlbumsRepository.findById(id);
 	}
 
 	@Override
 	public Artist updateArtist(Artist artist, String oldAlbumName, String newAlbumName) {
-		log.error("UpdateArtistAlbumServiceImpl.updateArtist()");
+		log.info("UpdateArtistAlbumServiceImpl.updateArtist()");
 		if (parmatersValid(oldAlbumName, newAlbumName)) {
 			log.error("Halted Possible SQL Injection!!!");
 		} else {
 			artist.getAlbums().forEach(a -> {
 				if (a.getAlbumName().equalsIgnoreCase(oldAlbumName)) {
-					log.error("Updating album name");
+					log.info("Updating album name");
 					a.setAlbumName(newAlbumName);
 				}
 			});

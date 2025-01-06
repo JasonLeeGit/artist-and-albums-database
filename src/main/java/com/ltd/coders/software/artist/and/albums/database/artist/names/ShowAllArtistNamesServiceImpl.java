@@ -31,7 +31,7 @@ public class ShowAllArtistNamesServiceImpl implements IShowAllArtistNamesService
 					.distinct()
 					.collect(toList());
 		}
-		log.error("ShowAllArtistNamesServiceImpl.getAllArtistNames()");
+		log.info("ShowAllArtistNamesServiceImpl.getAllArtistNames()");
 		return artistNames;
 	}
 }

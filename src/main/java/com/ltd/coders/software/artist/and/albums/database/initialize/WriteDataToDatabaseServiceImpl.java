@@ -22,20 +22,20 @@ public class WriteDataToDatabaseServiceImpl implements IWriteDataToDatabaseServi
 	@Override
 	@Transactional
 	public void saveAll(List<Artist> artists) {
-		log.error("WriteDataToDatabaseServiceImpl.saveAll()");
+		log.info("WriteDataToDatabaseServiceImpl.saveAll()");
 		artistAndAlbumsRepository.saveAll(artists);
 	}
 
 	@Override
 	@Transactional
 	public void saveAndFlush(Artist artist) {
-		log.error("WriteDataToDatabaseServiceImpl.saveAndFlush()");
+		log.info("WriteDataToDatabaseServiceImpl.saveAndFlush()");
 		artistAndAlbumsRepository.saveAndFlush(artist);
 	}
 
 	@Override
 	public long isRepositoryPopulated() {
-		log.error("checking if repository is populated count = " + artistAndAlbumsRepository.count());
+		log.info("checking if repository is populated count = " + artistAndAlbumsRepository.count());
 		return artistAndAlbumsRepository.count();
 	}
 }

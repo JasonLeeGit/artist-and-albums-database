@@ -34,7 +34,7 @@ public class DeleteArtistAndAlbumsController {
 	@Operation
     @DeleteMapping("/artist/artist-id")
 	public void deleteArtistById(@RequestParam("id") @Positive(message = "id must be greater than zero") int id) {
-		log.error("IN DeleteArtistAndAlbumsController.deleteArtistById()");
+		log.info("IN DeleteArtistAndAlbumsController.deleteArtistById()");
 		messageProducerService.sendMessage("artists-topic", "In deleteArtistById ID = "+ id);
 		deleteArtistService.deleteById(id);
 	}
@@ -43,7 +43,7 @@ public class DeleteArtistAndAlbumsController {
 	@DeleteMapping("/artist/artist-name")
 	public void deleteArtistByArtistName(
 			@RequestParam("artistName") @NotBlank(message = "artist name cannot be null or empty") String artistName) {
-		log.error("IN DeleteArtistAndAlbumsController.deleteArtistByArtistName()");
+		log.info("IN DeleteArtistAndAlbumsController.deleteArtistByArtistName()");
 		messageProducerService.sendMessage("artists-topic", "In deleteArtistByArtistName artists name = "+ artistName);
 		deleteArtistService.deleteByArtistName(artistName);
 	}

@@ -40,7 +40,7 @@ public class ShowAllArtistsWithAllAlbumsWithPaginationController {
 			@RequestParam(required = true, defaultValue = "0") @Min(value = 0) @Max(value = 10) int offSet,
 			@RequestParam(required = true, defaultValue = "1") @Min(value = 1) @Max(value = 10) int pageSize) {
 		
-		log.error("ShowAllArtistsWithAllAlbumsController.showAllArtistsWithAllAlbumsAndTrack()");
+		log.info("ShowAllArtistsWithAllAlbumsController.showAllArtistsWithAllAlbumsAndTrack()");
 		Page<Artist> artists = readAllArtistsWithAllAlbumsService.getAllArtistsWithPagination(offSet, pageSize);
 		
 		if (artists != null) {

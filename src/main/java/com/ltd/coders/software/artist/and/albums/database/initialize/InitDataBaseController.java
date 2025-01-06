@@ -35,12 +35,13 @@ public class InitDataBaseController {
 	public void loadTableData() {
 
 		if (writeDataService.isRepositoryPopulated() <= 0) {
-			log.error("Database Empty Proceeding with reading and writing records");
+			System.out.println("Loading Data!");
+			log.info("Database Empty Proceeding with reading and writing records");
 			messageProducerService.sendMessage("artists-topic", "In loadTableData Database Empty Proceeding with reading and writing records");
 			readDataService.directoryList().forEach(artist -> writeDataService.saveAndFlush(artist));
 		} else {
 			messageProducerService.sendMessage("artists-topic", "In loadTableData Database already populated no new records inserted");
-			log.error("Database already populated no new records inserted");
+			log.info("Database already populated no new records inserted");
 		}
 	}
 }

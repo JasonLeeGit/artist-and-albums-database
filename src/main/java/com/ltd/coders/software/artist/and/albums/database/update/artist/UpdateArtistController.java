@@ -46,7 +46,7 @@ public class UpdateArtistController {
 			@RequestParam("old-album-name") @NotBlank(message = "old album name cannot be null or empty") String oldAlbumName,
 			@RequestParam("new-album-name") @NotBlank(message = "new album name cannot be null or empty") String newAlbumName) {
 
-		log.error("UpdateArtistController.updateArtistAlbumName()");
+		log.info("UpdateArtistController.updateArtistAlbumName()");
 
 		Optional<Artist> artist = updateArtistAlbumService.findArtist(id);
 		if (artist.isPresent()) {

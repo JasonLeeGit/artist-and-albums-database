@@ -33,7 +33,7 @@ public class ShowAllArtistNamesController {
 	@Operation
 	@GetMapping("/artists/names")
 	public ResponseEntity<List<String>> showAllArtistNames() {
-		log.error("ShowAllArtistNamesController.showAllArtistNames()");
+		log.info("ShowAllArtistNamesController.showAllArtistNames()");
 		List<String> artists = readAllArtistNamesService.getAllArtistNames();
 			
 		if (artists != null) {

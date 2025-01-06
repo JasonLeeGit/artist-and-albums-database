@@ -21,7 +21,7 @@ public class DeleteArtistAndAlbumsServiceImpl implements IDeleteArtistAndAlbumsS
 	@Override
 	@Transactional
 	public void deleteByArtistName(String artistName) {
-		log.error("DeleteArtistAndAlbumsFromDatabaseServiceImpl.deleteByArtistName()");
+		log.info("DeleteArtistAndAlbumsFromDatabaseServiceImpl.deleteByArtistName()");
 		if (artistName.contains("artist")) {
 			log.info("Halted Possible SQL Injection");
 		} else {
@@ -32,7 +32,7 @@ public class DeleteArtistAndAlbumsServiceImpl implements IDeleteArtistAndAlbumsS
 	@Override
 	@Transactional
 	public void deleteById(int id) {
-		log.error("DeleteArtistAndAlbumsFromDatabaseServiceImpl.deleteByArtistId()");
+		log.info("DeleteArtistAndAlbumsFromDatabaseServiceImpl.deleteByArtistId()");
 		artistAndAlbumsRepository.deleteById(id);
 	}
 }

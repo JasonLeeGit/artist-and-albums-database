@@ -21,7 +21,7 @@ public class ShowAllArtistsWithAllAlbumsWithPaginationServiceImpl implements ISh
 	@Override
 	@Cacheable("allArtistsPagination")
 	public Page<Artist> getAllArtistsWithPagination(int offset, int pageSize) {
-		log.error("ShowAllArtistsWithAllAlbumsServiceImpl.getAllArtists()");
+		log.info("ShowAllArtistsWithAllAlbumsServiceImpl.getAllArtists()");
 		return artistAndAlbumsRepository.findAll(PageRequest.of(offset, pageSize));
 	}
 }

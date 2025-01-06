@@ -31,7 +31,7 @@ public class ReadDirectoryFromHardDriveAndReturnDataServiceImpl implements IRead
 
 	public List<Artist> directoryList() {
 		
-		log.error("ReadDirectoryFromHardDriveAndReturnDataServiceImpl.directoryList(), musicPath "+properties.getMusicPath());
+		log.info("ReadDirectoryFromHardDriveAndReturnDataServiceImpl.directoryList(), musicPath "+properties.getMusicPath());
 		
 		List<Artist> artistsList = new ArrayList<>();
 		try {
@@ -44,7 +44,7 @@ public class ReadDirectoryFromHardDriveAndReturnDataServiceImpl implements IRead
 			artistNames.forEach(artistName -> {
 				try {
 					if (isValidFileType(artistName)) {
-						log.error("reading artists name " + artistName);
+						log.info("reading artists name " + artistName);
 						Artist artist = new Artist();
 						artist.setArtistName(artistName);
 

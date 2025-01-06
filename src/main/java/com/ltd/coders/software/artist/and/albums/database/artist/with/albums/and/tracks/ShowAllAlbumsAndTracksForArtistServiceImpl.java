@@ -19,10 +19,10 @@ public class ShowAllAlbumsAndTracksForArtistServiceImpl implements IShowAllAlbum
 
 	@Override
 	public List<String> getAllAlbumsForArtist(String artistName) {
-		log.error("IN ShowAllAlbumsAndTracksForArtistServiceImpl.getAllAlbumsForArtist()");
+		log.info("IN ShowAllAlbumsAndTracksForArtistServiceImpl.getAllAlbumsForArtist()");
 		List<String> albumNamesForArtist = null;
 		if (artistName.contains("artist")) {
-			log.info("Halted Possible SQL Injection");
+			log.error("Halted Possible SQL Injection");
 		} else {
 			Artist artist = artistAndAlbumsRepository.findByArtistName(artistName);
 			if(artist != null) {

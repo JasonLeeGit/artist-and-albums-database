@@ -38,7 +38,7 @@ public class ShowAllAlbumsAndTracksForArtistController {
 	@GetMapping("/artist/album-names")
 	public ResponseEntity<List<String>> showAllAlbumNamesForArtist(
 			@RequestParam("artistName") @NotBlank(message = "artist name cannot be null or empty") String artistName) {
-		log.error("IN ShowAllAlbumsAndTracksForArtistController.showAllAlbumsForArtistName()");
+		log.info("IN ShowAllAlbumsAndTracksForArtistController.showAllAlbumsForArtistName()");
 		List<String> artistAlbums = readAllArtistsAndAlbumsService.getAllAlbumsForArtist(artistName);
 		if(artistAlbums != null) {
 			messageProducerService.sendMessage("artists-topic", "In showAllAlbumNamesForArtist for artist "+artistName+" album names returned = "+artistAlbums.size());
@@ -53,7 +53,7 @@ public class ShowAllAlbumsAndTracksForArtistController {
 	@GetMapping("/artist/albums/tracks")
 	public ResponseEntity<Artist> showAllAlbumsAndTracksForArtist(
 			@RequestParam("artistName") @NotBlank(message = "artist name cannot be null or empty") String artistName) {
-		log.error("IN ShowAllAlbumsAndTracksForArtistController.showAllAlbumsAndTracksForArtist() " + artistName);
+		log.info("IN ShowAllAlbumsAndTracksForArtistController.showAllAlbumsAndTracksForArtist() " + artistName);
 		Artist artist = readAllArtistsAndAlbumsService.getAllAlbumsAndTracksForArtist(artistName);
 		if (artist != null) {
 			messageProducerService.sendMessage("artists-topic", "In showAllAlbumsAndTracksForArtist for artist "+artistName+" albums returned = "+artist.getAlbums().size());
@@ -68,7 +68,7 @@ public class ShowAllAlbumsAndTracksForArtistController {
 	@GetMapping("/artist/albums/tracks/query")
 	public ResponseEntity<Artist> showAllAlbumsAndTracksForArtistQuery(
 			@RequestParam("artistName") @NotBlank(message = "artist name cannot be null or empty") String artistName) {
-		log.error("IN ShowAllAlbumsAndTracksForArtistController.showAllAlbumsAndTracksForArtistQuery()");
+		log.info("IN ShowAllAlbumsAndTracksForArtistController.showAllAlbumsAndTracksForArtistQuery()");
 		Artist artist = readAllArtistsAndAlbumsService.getAllAlbumsAndTracksForArtistQuery(artistName);
 		if(artist != null) {
 			messageProducerService.sendMessage("artists-topic", "In showAllAlbumsAndTracksForArtistQuery for artist "+artistName+" albums returned = "+artist.getAlbums().size());

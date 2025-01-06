@@ -41,7 +41,7 @@ public class InsertNewArtistController {
 	@PostMapping("/artist")
 	public ResponseEntity<Artist> insertArtist(@Valid @RequestBody ArtistRequestDto artistRequestDto)
 			throws ArtistExistsException {
-		log.error("InsertNewArtistController.insertArtist()");
+		log.info("InsertNewArtistController.insertArtist()");
 		Artist insertedArtist = insertNewArtistService.insertArtist(artistRequestDto.toArtist());
 		if (insertedArtist != null) {
 			messageProducerService.sendMessage("artists-topic", "In insertArtist, inserting valid artist");

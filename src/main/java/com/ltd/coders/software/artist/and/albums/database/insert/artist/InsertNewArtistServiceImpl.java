@@ -22,7 +22,7 @@ public class InsertNewArtistServiceImpl implements IInsertNewArtistService {
 		Artist insertedArtist = null;
 		if (artist.getArtistName() != null) {
 			if (!artistExistInDatabase(artist.getArtistName())) {
-				log.error("Artist Does Not Exist Inserting New Artist... ");
+				log.info("Artist Does Not Exist Inserting New Artist... ");
 				insertedArtist = artistAndAlbumsRepository.save(artist);
 			}
 		}
