@@ -12,6 +12,11 @@ import com.ltd.coders.software.artist.and.albums.database.kafka.MessageProducerS
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
+
+/**
+ * Used to populate a MySQL database by reading files in from external HDD will only run if database is empty
+ */
+
 @Tag(name = "Initialize Database")
 @RestController
 @RequestMapping("v1/artist/service")

@@ -14,7 +14,7 @@ public interface IArtistAndAlbumsRepository extends JpaRepository<Artist, Intege
 	// Not JpaRepository this generates something like SELECT * FROM Album WHERE artistName = ?
 	Artist findByArtistName(String artistName);
 
-	// Not JpaRepository this generates something like DELET FROM Album WHERE artistName = ?
+	// Not JpaRepository this generates something like DELETE FROM Album WHERE artistName = ?
 	@Modifying
 	void deleteByArtistName(String artistName);
 
