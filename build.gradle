@@ -43,11 +43,10 @@ dependencies {
 	runtimeOnly 'com.h2database:h2'
 }
 
-//exclude tests when building
-//test {
-//   exclude '**/test/**'
-//}
-
+//exclude tests when building as tests required kafka running
+test {
+    exclude '**/*'
+}
 
 tasks.named('test') {
 	useJUnitPlatform()
