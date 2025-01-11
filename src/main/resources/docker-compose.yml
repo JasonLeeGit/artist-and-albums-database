@@ -13,6 +13,7 @@ services:
       - "3307:3306"
     volumes:
       - ./dump.sql:/docker-entrypoint-initdb.d/dump.sql
+
   zookeeper:
     image: confluentinc/cp-zookeeper:latest
     environment:

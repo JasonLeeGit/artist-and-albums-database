@@ -1,8 +1,7 @@
 package com.ltd.coders.software.artist.and.albums.database.test.suite;
 
-import org.junit.runner.RunWith;
-import org.junit.runners.Suite;
-import org.junit.runners.Suite.SuiteClasses;
+import org.junit.platform.suite.api.SelectClasses;
+import org.junit.platform.suite.api.Suite;
 import org.springframework.test.context.ActiveProfiles;
 
 import com.ltd.coders.software.artist.and.albums.database.all.artists.with.albums.ShowAllArtistsWithAllAlbumsWithPaginationControllerMockTest;
@@ -25,10 +24,10 @@ import com.ltd.coders.software.artist.and.albums.database.update.artist.UpdateAr
 import com.ltd.coders.software.artist.and.albums.database.update.artist.UpdateArtistControllerRestTest;
 
 @ActiveProfiles("test")
-@RunWith(Suite.class)
-@SuiteClasses({
-	ShowAllArtistsWithAllAlbumsWithPaginationControllerMockTest.class,
-	ShowAllArtistsWithAllAlbumsWithPaginationControllerRepositoryTest.class,
+@Suite
+@SelectClasses({ 
+	ShowAllArtistsWithAllAlbumsWithPaginationControllerMockTest.class, 
+	ShowAllArtistsWithAllAlbumsWithPaginationControllerRepositoryTest.class, 
 	ShowAllArtistsWithAllAlbumsWithPaginationControllerRestTest.class,
 	
 	ShowAllArtistNamesControllerMockTest.class,
@@ -51,6 +50,6 @@ import com.ltd.coders.software.artist.and.albums.database.update.artist.UpdateAr
 	UpdateArtistControllerRepositoryTest.class,
 	UpdateArtistControllerRestTest.class
 })
-public class JunitTestSuite {
-
+public class JunitTestSuite
+{
 }
