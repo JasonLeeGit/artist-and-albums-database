@@ -37,7 +37,7 @@ public class ShowAllArtistNamesController {
 		List<String> artists = readAllArtistNamesService.getAllArtistNames();
 			
 		if (artists != null) {
-			messageProducerService.sendMessage("artists-topic", "In showAllArtistNames artists returned = "+artists.size());
+			messageProducerService.sendMessage("artists-topic","In showAllArtistNames, "+artists.toString());
 			return ResponseEntity.ok(artists);
 		} else {
 			messageProducerService.sendMessage("artists-topic", "In showAllArtistNames no artists found");

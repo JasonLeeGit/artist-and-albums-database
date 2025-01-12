@@ -44,12 +44,12 @@ public class InsertNewArtistController {
 		log.info("InsertNewArtistController.insertArtist()");
 		Artist insertedArtist = insertNewArtistService.insertArtist(artistRequestDto.toArtist());
 		if (insertedArtist != null) {
-			messageProducerService.sendMessage("artists-topic", "In insertArtist, inserting valid artist");
+			messageProducerService.sendMessage("artists-topic", "In insertArtist, inserted valid artist, "+insertedArtist.toString());
 			return ResponseEntity.ok(insertedArtist);
 		} else {
 		 	MultiValueMap<String, String> headers = new HttpHeaders();
 		 	headers.add("Error message", "Error failed to insert new artist");
-		 	messageProducerService.sendMessage("artists-topic", "Error failed to insert new artist, artist invalid");
+		 	messageProducerService.sendMessage("artists-topic", "In insertArtist Error failed to insert new artist, artist invalid");
 		 	return new ResponseEntity<Artist>(headers, HttpStatus.BAD_REQUEST);
 		}
 	}
