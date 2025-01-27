@@ -18,6 +18,10 @@ Start the artist-and-albums-database spring boot application
 Open a browser and goto,
 
 http://localhost:8080/swagger-ui/swagger-ui/index.html
+ 
+![image](https://github.com/user-attachments/assets/65f808c0-d48a-46f7-890c-f0053623616f)
+
+![image](https://github.com/user-attachments/assets/cceffad3-4096-440a-9d74-b090b76fe632)
 
 To view Kafka Topic and messages goto,
 
