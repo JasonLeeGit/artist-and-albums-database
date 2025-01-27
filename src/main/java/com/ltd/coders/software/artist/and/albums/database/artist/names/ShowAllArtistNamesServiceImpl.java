@@ -21,7 +21,6 @@ public class ShowAllArtistNamesServiceImpl implements IShowAllArtistNamesService
 	private IArtistAndAlbumsRepository artistAndAlbumsRepository;
 	
 	@Override
-	@Cacheable("allArtistNames")
 	public List<String> getAllArtistNames() {
 		List<String> artistNames = null;
 		List<Artist> artists = artistAndAlbumsRepository.findAll();
