@@ -37,7 +37,8 @@ public class ShowAllArtistNamesControllerRestTest extends ControllerJsonMapper {
 	@MockBean
 	private IShowAllArtistNamesService mockReadAllArtistNamesService;
 	
-	@BeforeEach	public void setUp() throws Exception {
+	@BeforeEach 
+	public void setUp() throws Exception {
 		super.setUp();
 	}
 
