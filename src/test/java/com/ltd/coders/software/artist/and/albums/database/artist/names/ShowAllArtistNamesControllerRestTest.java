@@ -11,6 +11,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.web.servlet.MvcResult;
@@ -27,6 +28,7 @@ import com.ltd.coders.software.artist.and.albums.database.ControllerJsonMapper;
 public class ShowAllArtistNamesControllerRestTest extends ControllerJsonMapper {
 
 	@Container
+	@ServiceConnection
 	static KafkaContainer kafka = new KafkaContainer(DockerImageName.parse("confluentinc/cp-kafka:latest"));
 	
 	@DynamicPropertySource
@@ -35,7 +37,7 @@ public class ShowAllArtistNamesControllerRestTest extends ControllerJsonMapper {
 	}
 	
 	@MockBean
-	private IShowAllArtistNamesService mockReadAllArtistNamesService;
+	private IShowAllArtistNamesService mockService;
 	
 	@BeforeEach 
 	public void setUp() throws Exception {
@@ -46,7 +48,7 @@ public class ShowAllArtistNamesControllerRestTest extends ControllerJsonMapper {
 	public void showAllArtistNamesTest() throws Exception {
 		artistNameList = Arrays.asList(ARTIST_NAME_ONE, ARTIST_NAME_TWO, ARTIST_NAME_THREE);
 		
-		when(mockReadAllArtistNamesService.getAllArtistNames()).thenReturn(artistNameList);
+		when(mockService.getAllArtistNames()).thenReturn(artistNameList);
 		MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get("/v1/artist/service/artists/names"))
 				.andExpect(status().isOk()).andReturn();
 		
@@ -62,7 +64,7 @@ public class ShowAllArtistNamesControllerRestTest extends ControllerJsonMapper {
 	}
 	
 	public void showAllArtistNamesWhenNoneFoundShouldThrowMismatchedInputExceptionTest() throws Exception {
-		when(mockReadAllArtistNamesService.getAllArtistNames()).thenReturn(artistNameList);
+		when(mockService.getAllArtistNames()).thenReturn(artistNameList);
 		MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get("/v1/artist/service/artists/names"))
 				.andExpect(status().isNoContent()).andReturn();
 		

@@ -12,6 +12,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.web.servlet.MvcResult;
@@ -34,9 +35,10 @@ import com.ltd.coders.software.artist.and.albums.database.entity.Track;
 public class ShowAllAlbumsAndTracksForArtistControllerRestTest extends ControllerJsonMapper {
 
 	@MockBean
-	private IShowAllAlbumsAndTracksForArtistService mockShowAllAlbumNamesForArtistFromDatabaseService;
+	private IShowAllAlbumsAndTracksForArtistService mockService;
 	
 	@Container
+	@ServiceConnection
 	static KafkaContainer kafka = new KafkaContainer(DockerImageName.parse("confluentinc/cp-kafka:latest"));
 	
 	@DynamicPropertySource
@@ -57,7 +59,7 @@ public class ShowAllAlbumsAndTracksForArtistControllerRestTest extends Controlle
 	public void showAllAlbumNamesForArtistTest() throws Exception {
 		artistNameList = Arrays.asList(ALBUM_ONE, ALBUM_TWO, ALBUM_THREE); 
 		
-		when(mockShowAllAlbumNamesForArtistFromDatabaseService.getAllAlbumsForArtist(ARTIST_NAME_ONE)).thenReturn(artistNameList);
+		when(mockService.getAllAlbumsForArtist(ARTIST_NAME_ONE)).thenReturn(artistNameList);
 		
 		MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get("/v1/artist/service/artist/album-names?artistName=" + ARTIST_NAME_ONE))
 				.andExpect(status().isOk()).andReturn();
@@ -75,7 +77,7 @@ public class ShowAllAlbumsAndTracksForArtistControllerRestTest extends Controlle
 	@Test
 	public void showAllAlbumsAndTracksForArtistTest() throws Exception {
 
-		when(mockShowAllAlbumNamesForArtistFromDatabaseService.getAllAlbumsAndTracksForArtist(ARTIST_NAME_ONE))
+		when(mockService.getAllAlbumsAndTracksForArtist(ARTIST_NAME_ONE))
 				.thenReturn(artistToReturn);
 
 		MvcResult mvcResult = mockMvc
@@ -97,7 +99,7 @@ public class ShowAllAlbumsAndTracksForArtistControllerRestTest extends Controlle
 	@Test
 	public void showAllAlbumsAndTracksForArtistQueryTest() throws Exception {
 
-		when(mockShowAllAlbumNamesForArtistFromDatabaseService.getAllAlbumsAndTracksForArtistQuery(ARTIST_NAME_ONE))
+		when(mockService.getAllAlbumsAndTracksForArtistQuery(ARTIST_NAME_ONE))
 				.thenReturn(artistToReturn);
 
 		MvcResult mvcResult = mockMvc

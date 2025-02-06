@@ -11,6 +11,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
@@ -31,13 +32,14 @@ import com.ltd.coders.software.artist.and.albums.database.entity.Artist;
 public class InsertNewArtistControllerRestTest extends ControllerJsonMapper {
 		
 	@MockBean
-	private IInsertNewArtistService mockInsertNewArtistService;
+	private IInsertNewArtistService mockService;
 	private ArtistRequestDto validArtistRequestDto;
 	private ArtistRequestDto invalidArtistRequestDto;
 	private Artist validArtistToSave;
 	private Artist invalidArtistToSave;
 	
 	@Container
+	@ServiceConnection
 	static KafkaContainer kafka = new KafkaContainer(DockerImageName.parse("confluentinc/cp-kafka:latest"));
 	
 	@DynamicPropertySource
@@ -57,14 +59,14 @@ public class InsertNewArtistControllerRestTest extends ControllerJsonMapper {
 
 	@Test
 	public void insertNewValidArtistWithAlbumsAndTracks() throws Exception {
-		when(mockInsertNewArtistService.insertArtist(validArtistRequestDto.toArtist())).thenReturn(validArtistToSave);
+		when(mockService.insertArtist(validArtistRequestDto.toArtist())).thenReturn(validArtistToSave);
 		mockMvc.perform(MockMvcRequestBuilders.post("/v1/artist/service/artist")
 				.content(asJsonString(validArtistRequestDto))
 				.contentType(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON))
 				.andExpect(status().isOk());
 		
-        verify(mockInsertNewArtistService, times(1)).insertArtist(validArtistToSave);
+        verify(mockService, times(1)).insertArtist(validArtistToSave);
 	}
 
 	@Test
@@ -74,7 +76,7 @@ public class InsertNewArtistControllerRestTest extends ControllerJsonMapper {
 				.contentType(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON))
 				.andExpect(status().is4xxClientError());
-        verify(mockInsertNewArtistService, times(0)).insertArtist(invalidArtistToSave);
+        verify(mockService, times(0)).insertArtist(invalidArtistToSave);
 	}
 	
 	private static String asJsonString(final Object obj) {

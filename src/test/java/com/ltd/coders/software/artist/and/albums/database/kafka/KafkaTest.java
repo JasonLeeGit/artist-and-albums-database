@@ -8,6 +8,8 @@ import java.util.concurrent.TimeUnit;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.containers.KafkaContainer;
@@ -17,9 +19,11 @@ import org.testcontainers.utility.DockerImageName;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Testcontainers
+@ActiveProfiles({"test"})
 public class KafkaTest {
 
 	@Container
+	@ServiceConnection
 	static KafkaContainer kafka = new KafkaContainer(DockerImageName.parse("confluentinc/cp-kafka:latest"));
 
 	@Autowired
@@ -30,7 +34,7 @@ public class KafkaTest {
 		registry.add("spring.kafka.bootstrap-servers", kafka::getBootstrapServers);
 	}
 
-	//@Test
+	@Test
 	public void test() {
 		producer.sendMessage("artists-topic", "message one OK");
 		producer.sendMessage("artists-topic", "message two Fail");

@@ -13,6 +13,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.web.servlet.MvcResult;
@@ -31,9 +32,10 @@ import com.ltd.coders.software.artist.and.albums.database.entity.Artist;
 public class UpdateArtistControllerRestTest extends ControllerJsonMapper {
 
 	@MockBean
-	private IUpdateArtistAlbumService mockUpdateArtistAlbumService;
+	private IUpdateArtistAlbumService mockService;
 	
 	@Container
+	@ServiceConnection
 	static KafkaContainer kafka = new KafkaContainer(DockerImageName.parse("confluentinc/cp-kafka:latest"));
 	
 	@DynamicPropertySource
@@ -53,8 +55,8 @@ public class UpdateArtistControllerRestTest extends ControllerJsonMapper {
 
 	@Test
 	public void updateArtistWhenAllDetailsPresentTest() throws Exception {
-		when(mockUpdateArtistAlbumService.findArtist(1)).thenReturn(Optional.of(artist));
-		when(mockUpdateArtistAlbumService.updateArtist(artist, ARTIST_NAME_ONE, UPDATED_ARTIST_NAME))
+		when(mockService.findArtist(1)).thenReturn(Optional.of(artist));
+		when(mockService.updateArtist(artist, ARTIST_NAME_ONE, UPDATED_ARTIST_NAME))
 				.thenReturn(artistToReturn);
 
 		MvcResult mvcResult = mockMvc
@@ -65,7 +67,7 @@ public class UpdateArtistControllerRestTest extends ControllerJsonMapper {
 		assertEquals(200, mvcResult.getResponse().getStatus());
 		Artist result = mapFromJson(mvcResult.getResponse().getContentAsString(), Artist.class);
 
-		verify(mockUpdateArtistAlbumService, times(1)).updateArtist(artist, ARTIST_NAME_ONE, UPDATED_ARTIST_NAME);
+		verify(mockService, times(1)).updateArtist(artist, ARTIST_NAME_ONE, UPDATED_ARTIST_NAME);
 		assertEquals(result.getArtistName(), UPDATED_ARTIST_NAME);
 	}
 
@@ -77,7 +79,7 @@ public class UpdateArtistControllerRestTest extends ControllerJsonMapper {
 
 		assertEquals(400, mvcResult.getResponse().getStatus());
 		Artist result = mapFromJson(mvcResult.getResponse().getContentAsString(), Artist.class);
-		verify(mockUpdateArtistAlbumService, times(0)).updateArtist(artist, ARTIST_NAME_ONE, UPDATED_ARTIST_NAME);
+		verify(mockService, times(0)).updateArtist(artist, ARTIST_NAME_ONE, UPDATED_ARTIST_NAME);
 		assertEquals(result.getArtistName(), ARTIST_NAME_ONE);
 	}
 
@@ -89,7 +91,7 @@ public class UpdateArtistControllerRestTest extends ControllerJsonMapper {
 
 		assertEquals(400, mvcResult.getResponse().getStatus());
 		Artist result = mapFromJson(mvcResult.getResponse().getContentAsString(), Artist.class);
-		verify(mockUpdateArtistAlbumService, times(0)).updateArtist(artist, ARTIST_NAME_ONE, UPDATED_ARTIST_NAME);
+		verify(mockService, times(0)).updateArtist(artist, ARTIST_NAME_ONE, UPDATED_ARTIST_NAME);
 		assertEquals(result.getArtistName(), ARTIST_NAME_ONE);
 	}
 }

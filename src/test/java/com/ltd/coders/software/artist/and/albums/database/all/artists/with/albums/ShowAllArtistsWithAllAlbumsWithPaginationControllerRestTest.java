@@ -9,6 +9,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -28,6 +29,7 @@ import com.ltd.coders.software.artist.and.albums.database.entity.Track;
 public class ShowAllArtistsWithAllAlbumsWithPaginationControllerRestTest extends ControllerJsonMapper {
 
 	@Container
+	@ServiceConnection
 	static KafkaContainer kafka = new KafkaContainer(DockerImageName.parse("confluentinc/cp-kafka:latest"));
 	
 	@DynamicPropertySource
@@ -36,7 +38,7 @@ public class ShowAllArtistsWithAllAlbumsWithPaginationControllerRestTest extends
 	}
 	
 	@MockBean
-	private IShowAllArtistsWithAllAlbumsWithPaginationService mockShowAllArtistsWithAllAlbumsFromDatabaseService;
+	private IShowAllArtistsWithAllAlbumsWithPaginationService mockService;
 	
 	@BeforeEach
 	public void setUp() throws Exception {
@@ -55,7 +57,7 @@ public class ShowAllArtistsWithAllAlbumsWithPaginationControllerRestTest extends
 
 	@Test
 	public void showAllArtistsWithAllAlbumsAndTrackWithDefaultPagination() throws Exception {
-		when(mockShowAllArtistsWithAllAlbumsFromDatabaseService.getAllArtistsWithPagination(0, 1))
+		when(mockService.getAllArtistsWithPagination(0, 1))
 				.thenReturn(new PageHelper().getArtists(artistList, 0, 1));
 		mockMvc.perform(MockMvcRequestBuilders.get("/v1/artist/service/artists/albums/tracks/pagination"))
 				.andExpect(status().isOk());
