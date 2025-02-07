@@ -14,13 +14,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
-import org.springframework.test.context.DynamicPropertyRegistry;
-import org.springframework.test.context.DynamicPropertySource;
-import org.testcontainers.containers.KafkaContainer;
-import org.testcontainers.junit.jupiter.Container;
-import org.testcontainers.junit.jupiter.Testcontainers;
-import org.testcontainers.utility.DockerImageName;
 
 import com.ltd.coders.software.artist.and.albums.database.RepositoryForMocksHelper;
 import com.ltd.coders.software.artist.and.albums.database.entity.Album;
@@ -28,25 +21,14 @@ import com.ltd.coders.software.artist.and.albums.database.entity.Artist;
 import com.ltd.coders.software.artist.and.albums.database.kafka.MessageProducerService;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@Testcontainers
 public class UpdateArtistControllerMockTest extends RepositoryForMocksHelper {
 
 	private static final String UPDATED_ARTIST_NAME = "Updated Artist Name";
 	private Artist artist, artistToReturn;
 	@Autowired
 	private MessageProducerService messageProducerService;
-	
-	@Container
-	@ServiceConnection
-	static KafkaContainer kafka = new KafkaContainer(DockerImageName.parse("confluentinc/cp-kafka:latest"));
-	
-	@DynamicPropertySource
-	public static void initKafkaProperties(DynamicPropertyRegistry registry) {
-		registry.add("spring.kafka.bootstrap-servers", kafka::getBootstrapServers);
-	}
 
 	@BeforeEach
-
 	public void setUp() throws Exception {
 		messageProducerService = mock(MessageProducerService.class);
 		albumsList = List.of(Album.builder().albumId(1L).artistName(ARTIST_NAME_ONE).albumName(ALBUM_ONE).build());

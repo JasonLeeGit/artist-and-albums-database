@@ -30,7 +30,6 @@ import com.ltd.coders.software.artist.and.albums.database.exception.ArtistExists
 import com.ltd.coders.software.artist.and.albums.database.kafka.MessageProducerService;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@Testcontainers
 public class InsertNewArtistControllerMockTest extends RepositoryForMocksHelper {
 
 	private ArtistRequestDto artistToSaveRequest;
@@ -40,15 +39,6 @@ public class InsertNewArtistControllerMockTest extends RepositoryForMocksHelper 
 	
 	@Autowired
 	private MessageProducerService messageProducerService;
-
-	@Container
-	@ServiceConnection
-	static KafkaContainer kafka = new KafkaContainer(DockerImageName.parse("confluentinc/cp-kafka:latest"));
-	
-	@DynamicPropertySource
-	public static void initKafkaProperties(DynamicPropertyRegistry registry) {
-		registry.add("spring.kafka.bootstrap-servers", kafka::getBootstrapServers);
-	}
 
 	@BeforeEach
 	public void setUp() {
