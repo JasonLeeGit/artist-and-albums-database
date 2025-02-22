@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 import com.ltd.coders.software.artist.and.albums.database.entity.Artist;
 import com.ltd.coders.software.artist.and.albums.database.repository.IArtistAndAlbumsRepository;
 
+import jakarta.transaction.Transactional;
+
 @Service
 public class UpdateArtistAlbumServiceImpl implements IUpdateArtistAlbumService {
 
@@ -24,6 +26,7 @@ public class UpdateArtistAlbumServiceImpl implements IUpdateArtistAlbumService {
 	}
 
 	@Override
+	@Transactional
 	public Artist updateArtist(Artist artist, String oldAlbumName, String newAlbumName) {
 		log.info("UpdateArtistAlbumServiceImpl.updateArtist()");
 		if (parmatersValid(oldAlbumName, newAlbumName)) {

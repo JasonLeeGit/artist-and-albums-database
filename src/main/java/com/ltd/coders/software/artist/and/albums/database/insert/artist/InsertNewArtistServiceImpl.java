@@ -9,6 +9,8 @@ import com.ltd.coders.software.artist.and.albums.database.entity.Artist;
 import com.ltd.coders.software.artist.and.albums.database.exception.ArtistExistsException;
 import com.ltd.coders.software.artist.and.albums.database.repository.IArtistAndAlbumsRepository;
 
+import jakarta.transaction.Transactional;
+
 @Service
 public class InsertNewArtistServiceImpl implements IInsertNewArtistService {
 
@@ -18,6 +20,7 @@ public class InsertNewArtistServiceImpl implements IInsertNewArtistService {
 	private IArtistAndAlbumsRepository artistAndAlbumsRepository;
 
 	@Override
+	@Transactional
 	public Artist insertArtist(Artist artist) throws ArtistExistsException {
 		Artist insertedArtist = null;
 		if (artist.getArtistName() != null) {
